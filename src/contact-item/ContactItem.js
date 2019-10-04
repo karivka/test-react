@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from "react-bootstrap"
+import styles from "./ContactItem.module.css"
 
 class ContactItem extends React.Component {
     constructor(props) {
@@ -16,6 +17,10 @@ class ContactItem extends React.Component {
         });
     }
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return true;
+    }
+
     render() {
         const {firstName, lastName, phone} = this.props;
         const {expanded} = this.state;
@@ -23,7 +28,7 @@ class ContactItem extends React.Component {
             <div>
                 <p>{firstName} {lastName} <Button size="sm"
                                                   onClick={this.expandHandler}>{expanded ? 'Collapse' : 'Expand'}</Button></p>
-                {expanded && <p>{phone}</p>}
+                {expanded && <p className={styles.class1}>{phone}</p>}
             </div>
         );
     }

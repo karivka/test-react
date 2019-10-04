@@ -10,7 +10,6 @@ class ContactList extends React.Component {
     }
 
     render() {
-
         const {onContactChange, contactList, onContactDelete} = this.props;
         const contactListContent = contactList.map(contact =>
             (<ListGroup.Item key={contact.firstName + contact.lastName}>

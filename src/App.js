@@ -3,16 +3,31 @@ import './App.css';
 import ContactList from './contact-list/ContactList';
 import Button from "react-bootstrap/Button";
 import ContactForm from "./contact-form/ContactForm";
+import HookComponent from "./HookComponent/HookComponent";
+import LifecycleComponent from "./LifecycleComponent/LifecycleComponent";
+import TestComponent from "./LifecycleComponent/TestComponent/TestComponent";
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
+import wrapperComponent from "./WrapperComponent/WrapperComponent";
 
 class App extends React.Component {
+    state = {
+        showContactForm: false,
+        contact: {},
+        contactList: [],
+        isNew: false
+    }
+
     constructor(props) {
         super(props);
-        this.state = {
-            showContactForm: false,
-            contact: {},
-            contactList: [],
-            isNew: false
-        }
+    }
+
+    static getDerivedStateFromError(error) {
+        console.log("getDerivedStateFromError ", error);
+        return null;
+    }
+
+    componentDidCatch(error, info) {
+        console.log("[App] component did catch ", error);
     }
 
     openNewContact = () => {
@@ -68,6 +83,12 @@ class App extends React.Component {
         });
     }
 
+    lifecycleClickHandler = () => {
+        this.setState({
+            contact: {}
+        });
+    }
+
 
     render() {
         const {showContactForm, isNew, contact, contactList } = this.state;
@@ -78,9 +99,14 @@ class App extends React.Component {
                 <div className="contact-list"><ContactList contactList={contactList} onContactChange={this.onContactChange.bind(this)} onContactDelete={this.onContactDelete.bind(this)}></ContactList></div>
 
                 <ContactForm contact={contact} show={showContactForm} isNew={isNew} onShowChange={this.showContactFormHandler} onNewAdded={this.onContactAdded.bind(this)} onContactEdit={this.onContactEdit.bind(this)}></ContactForm>
+                {contactList.length && <HookComponent prop1="some parent property"></HookComponent>}
+                {contactList.length && <LifecycleComponent clicked={this.lifecycleClickHandler} prop1="1">
+                <TestComponent/>
+                </LifecycleComponent> }
+                <ErrorBoundary><TestComponent/></ErrorBoundary>
             </div>
         );
     }
 }
 
-export default App;
+export default wrapperComponent(App);
